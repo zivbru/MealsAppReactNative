@@ -1,0 +1,16 @@
+navigation
+
+1.props.navigation.navigate('CategoryMeals');
+
+2. props.navigation.push('CategoryMeals');
+
+1 && 2 are the same but in push when we changes the same screen layout like dropbox app(same screen different folders )
+
+replace uses when we dont want the user will have an option to go back like in login screen
+3. props.navigation.replace('CategoryMeals');
+
+// go to prev page
+props.navigation.goBack();
+
+// go to first(main) page
+ props.navigation.popToTop();
