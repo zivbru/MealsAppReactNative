@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import MealsNavigator from './navigation/MealsNavigator';
+import { enableScreens } from 'react-native-screens';
 
-const fetchFonts = () => {
+// more efficient way to load screens
+enableScreens();
+
+const fetchFonts = async () => {
   return Font.loadAsync({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 };
-
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
   if (!fontLoaded) {
@@ -18,7 +21,7 @@ export default function App() {
       <AppLoading
         startAsync={fetchFonts}
         onFinish={setFontLoaded(true)}
-        onError={(err) => console.error(err)}
+        onError={(err) => console.error('ziv123', err)}
       ></AppLoading>
     );
   }

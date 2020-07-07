@@ -1,25 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { CATEGORIES } from '../data/dummy-data';
+import CategoryGridTile from '../components/CategoryGridTile';
 
 const CategoriesScreen = (props) => {
-  console.log(props);
-  return (
-    <View style={styles.screen}>
-      <Text> The Categories Screen</Text>
-      <Button
-        title='Go To Meals!'
-        onPress={() => {
-          props.navigation.navigate({ routeName: 'CategoryMeals' });
-          // we can do also like:
-          // props.navigation.navigate('CategoryMeals');
-          // or :
-          // props.navigation.push('CategoryMeals');
-          // replace uses when we dont want the user will have an option to go back like in logon //// screen
-          // props.navigation.replace('CategoryMeals');
+  const renderGridItem = (itemData) => {
+    return (
+      <CategoryGridTile
+        title={itemData.item.title}
+        color={itemData.item.color}
+        onSelect={() => {
+          props.navigation.navigate({
+            routeName: 'CategoryMeals',
+            params: { categoryId: itemData.item.id },
+          });
         }}
-      ></Button>
-    </View>
+      ></CategoryGridTile>
+    );
+  };
+
+  return (
+    <FlatList
+      keyExtractor={(item, index) => item.id}
+      data={CATEGORIES}
+      renderItem={renderGridItem}
+      numColumns={2}
+    />
   );
+};
+
+CategoriesScreen.navigationOptions = {
+  headerTitle: 'Meals Categories',
 };
 
 export default CategoriesScreen;
