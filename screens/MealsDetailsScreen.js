@@ -1,23 +1,46 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { MEALS } from '../data/dummy-data';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../components/HeaderButton';
+import DefaultText from '../components/defaultText';
+
+const ListItem = (props) => {
+  return (
+    <View style={styles.listItem}>
+      <DefaultText>{props.children}</DefaultText>
+    </View>
+  );
+};
 
 const MealsDetailsScreen = (props) => {
   const mealId = props.navigation.getParam('mealId');
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
   return (
-    <View style={styles.screen}>
-      <Text>{selectedMeal.title}s</Text>
-      <Button
-        title='Go to root screen'
-        onPress={() => {
-          props.navigation.popToTop();
-        }}
-      ></Button>
-    </View>
+    <ScrollView style={styles.screen}>
+      <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
+      <View style={styles.details}>
+        <DefaultText>{selectedMeal.duration}m</DefaultText>
+        <DefaultText>{selectedMeal.coplexlity.toUpperCase()}</DefaultText>
+        <DefaultText>{selectedMeal.affordability}</DefaultText>
+      </View>
+      <Text style={styles.title}>ingergients</Text>
+      {selectedMeal.ingergients.map((ing, index) => (
+        <ListItem key={index}>{ing}</ListItem>
+      ))}
+      <Text style={styles.title}>Steps</Text>
+      {selectedMeal.steps.map((step, index) => (
+        <ListItem key={index}>{step}</ListItem>
+      ))}
+    </ScrollView>
   );
 };
 
@@ -45,9 +68,27 @@ MealsDetailsScreen.navigationOptions = (navigationData) => {
 export default MealsDetailsScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  screen: {},
+  image: {
+    width: '100%',
+    height: 200,
+  },
+  details: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 15,
+  },
+  title: {
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  listItem: {
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
   },
 });

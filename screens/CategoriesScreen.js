@@ -3,6 +3,8 @@ import { StyleSheet, View, Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGridTile from '../components/CategoryGridTile';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import CustomHeaderButton from '../components/HeaderButton';
 
 const CategoriesScreen = (props) => {
   const renderGridItem = (itemData) => {
@@ -30,8 +32,35 @@ const CategoriesScreen = (props) => {
   );
 };
 
-CategoriesScreen.navigationOptions = {
-  headerTitle: 'Meals Categories',
+// () => {
+//   return (
+//     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+//       <Item
+//         title='Favorite'
+//         iconName='ios-star'
+//         onPress={() => console.log('pressed')}
+//       />
+//     </HeaderButtons>
+//   );
+// },
+
+CategoriesScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Meals Categories',
+    headerLeft: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title='Menu'
+            iconName='ios-menu'
+            onPress={() => {
+              navData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
+  };
 };
 
 export default CategoriesScreen;
