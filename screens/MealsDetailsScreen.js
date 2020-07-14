@@ -17,10 +17,14 @@ const ListItem = (props) => {
 const MealsDetailsScreen = (props) => {
   const mealId = props.navigation.getParam('mealId');
   const availableMeals = useSelector((state) => state.meals.meals);
+  const currentMealIsFavorite = useSelector((state) =>
+    state.meals.favoriteMeals.some((fav) => fav.id === mealId)
+  );
+
   const selectedMeal = availableMeals.find((meal) => meal.id === mealId);
 
   const dispatch = useDispatch();
-  //usecallback takecare that this function will not recreated  and not  render the page again unless on of the params will change like mealId
+  //usecallback takecare that this function will not recreated  and not  render the page again unless one of the params will change like mealId
   const toggleFavoriteHandler = useCallback(() => {
     dispatch(toggleFavorite(mealId));
   }, [dispatch, mealId]);
@@ -32,6 +36,12 @@ const MealsDetailsScreen = (props) => {
       toggleFav: toggleFavoriteHandler,
     });
   }, [toggleFavoriteHandler]);
+
+  useEffect(() => {
+    props.navigation.setParams({
+      isFav: currentMealIsFavorite,
+    });
+  }, [currentMealIsFavorite]);
 
   return (
     <ScrollView style={styles.screen}>
@@ -58,12 +68,17 @@ MealsDetailsScreen.navigationOptions = (navigationData) => {
   // const selectedMeal = MEALS.find((meal) => meal.id === mealId);
   const mealTitle = navigationData.navigation.getParam('mealTitle');
   const toggleFavorite = navigationData.navigation.getParam('toggleFav');
+  const isFavorite = navigationData.navigation.getParam('isFav');
   return {
     headerTitle: mealTitle,
     headerRight: () => {
       return (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-          <Item title='Favorite' iconName='ios-star' onPress={toggleFavorite} />
+          <Item
+            title='Favorite'
+            iconName={isFavorite ? 'ios-star' : 'ios-star-outline'}
+            onPress={toggleFavorite}
+          />
         </HeaderButtons>
       );
     },
